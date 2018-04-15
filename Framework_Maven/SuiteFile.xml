@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite" parallel="false">
+	<test name="Test">
+		<classes>
+			<class name="scripts.Test_1" />
+		</classes>
+
+		<suite-files>
+			<suite-file path="src/test/java/scripts/testng.xml" />
+		</suite-files>
+
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
