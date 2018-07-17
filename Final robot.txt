@@ -1,0 +1,81 @@
+package SGB;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.ie.InternetExplorerDriver;
+//import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.Test;
+
+
+public class promot {
+	
+	int rowcount;
+	
+	@Test
+	public void f() throws Exception{
+
+		System.setProperty("webdriver.chrome.driver", "browser/chromedriver.exe");
+		WebDriver driver = new ChromeDriver();   
+		driver.get("https://www.w3schools.com/js/tryit.asp?filename=tryjs_prompt");
+		driver.manage().window().maximize();
+
+		driver.switchTo().frame("iframeResult");
+		driver.findElement(By.xpath("//button[.='Try it']")).click();
+
+		String text = "kirran ";
+		System.out.println(text);
+		
+		
+		StringSelection stringSelection = new StringSelection(text);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, stringSelection);
+		Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.keyRelease(KeyEvent.VK_V);
+
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		
+		for (int i = 1; i <= rowcount; i++) {
+			
+			String k = ExcelRead(i, 1);
+				
+		}	
+	}
+	
+
+	public String ExcelRead(int row, int Column) throws Exception{
+		DataFormatter d = new DataFormatter();
+		String FilePath = "E:\\kishore.xlsx";
+		String SheetName = "Sheet1";
+		FileInputStream fi = new FileInputStream(FilePath);  //Path
+		XSSFWorkbook wb = new XSSFWorkbook(fi);  //xlsx format
+		XSSFSheet sh = wb.getSheet(SheetName); // sheet name
+		int rowcount = sh.getRow(0).getLastCellNum();
+		XSSFRow r = sh.getRow(row);  //row
+		String cellvalue = d.formatCellValue(r.getCell(Column));  // column
+		System.out.println("cellvalue  "+cellvalue);
+		wb.close();
+		fi.close();
+		return cellvalue;
+		
+	}
+
+}
